@@ -1,20 +1,20 @@
 var LolApi = require('leagueapi');
-var config = require('../../config/config.json');
+var config = require('../../../config/config.json');
 
-LolApi.init(config.riotKey, 'euw');
+LolApi.init(config.riotKey);
 
 function ucfirst(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getDivision(pname, callback) {
+function getDivision(pname, server, callback) {
 	pname = pname.toLowerCase();
 
-	LolApi.Summoner.getByName(pname, 'euw', function(err, summoner) {
+	LolApi.Summoner.getByName(pname, server, function(err, summoner) {
 		if (err)
 			return console.error(err);
 
-		LolApi.getLeagueEntryData(summoner[pname].id, 'euw', function(err, data) {
+		LolApi.getLeagueEntryData(summoner[pname].id, server, function(err, data) {
 			if (err)
 				return;
 
@@ -32,9 +32,11 @@ module.exports = function(bot, conf, args) {
 		if (!data.lol || !data.lol.ign)
 			return;
 
-		getDivision(data.lol.ign, function(divisionStr) {
-			if (divisionStr != data.lol.division)
-				that.sink(that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
+		getDivision(data.lol.ign, data.lol.server, function(divisionStr) {
+			if (divisionStr == data.lol.division)
+				return;
+
+			that.sink(that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
 
 			data.lol.division = divisionStr;
 			done();

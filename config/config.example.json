@@ -1,5 +1,7 @@
 {
 	"riotKey": "",
+	"youtubeKey": "",
+	"twitchClientId": "",
 	"discord": {
 		"email": "",
 		"password": ""
