@@ -13,6 +13,9 @@ module.exports = {
 
 			var data = JSON.parse(body);
 
+			if (!data.items || !data.items[0])
+				return callback('Unable to get infos.');
+
 			callback(null, data.items[0]);
 		});
 	},
@@ -29,6 +32,9 @@ module.exports = {
 				return callback(err);
 
 			var data = JSON.parse(body);
+
+			if (!data.items)
+				return callback('Unable to get infos.');
 
 			callback(null, data.items);
 		});

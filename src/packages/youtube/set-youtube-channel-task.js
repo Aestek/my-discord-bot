@@ -7,7 +7,7 @@ module.exports = function(options) {
 		if (!args.commandArgs.channelId)
 			return this.reply('You did not provide a channelId :(.');
 
-		api.getChannelInfos(options.yotubeKey, args.commandArgs.channelId, function(err, res) {
+		api.getChannelInfos(options.youtubeKey, args.commandArgs.channelId, function(err, res) {
 			if (err)
 				return that.reply('There was an error setting your Youtube channel :(.')
 
