@@ -23,7 +23,7 @@ bot.use(require('./packages/youtube')({
 	youtubeKey: process.env.YOUTUBE_KEY
 }));
 
-bot.use(require('./packages/bonjour-madame')({ sink: testingChan }));
+bot.use(require('./packages/bonjour-madame')({ sink: generalChan }));
 
 bot.use(require('./packages/twitch')({
 	sink: testingChan,
