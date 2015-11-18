@@ -4,7 +4,7 @@ var request = require('request');
 module.exports = function(options) {
 	return function(bot) {
 		bot
-			.on(bot.triggers.cron, '10 12 * * *')
+			.on(bot.triggers.cron, '0 10 * * *')
 			.sink(options.sink)
 			.do(function(bot, conf) {
 				var that = this;
