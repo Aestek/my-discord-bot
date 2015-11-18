@@ -1,5 +1,4 @@
 var Bot = require('discord-bot');
-var config = require('../config/config.json');
 
 var bot = new Bot({
 	email: process.env.DISCORD_EMAIL,
