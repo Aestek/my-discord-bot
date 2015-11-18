@@ -10,6 +10,6 @@ module.exports = function(options) {
 			.on(bot.triggers.cron, '* * * * *')
 			.sink(options.sink)
 			.forEachUser()
-			.do(require('./fetch-streams-task'));
+			.do(require('./fetch-streams-task')({ twicthKey: options.twicthKey }));
 	}
 }

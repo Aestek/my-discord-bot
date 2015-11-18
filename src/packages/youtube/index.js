@@ -4,18 +4,18 @@ module.exports = function(options) {
 			.on(bot.triggers.cron, '* * * * *')
 			.forEachUser()
 			.sink(options.sink)
-			.do(require('./fetch-new-videos-task'));
+			.do(require('./fetch-new-videos-task')({ youtubeKey: options.youtubeKey }));
 
 		bot
 			.on(bot.triggers['mention-command'], 'set-youtube-channel', ['channelId'])
 			.describe('Set your Youtube channel id.')
 			.withStore()
-			.do(require('./set-youtube-channel-task'));
+			.do(require('./set-youtube-channel-task')({ youtubeKey: options.youtubeKey }));
 
 		bot
 			.on(bot.triggers['mention-command'], 'get-youtube-channel')
 			.describe('get infos about the Youtube channel you set.')
 			.withStore()
-			.do(require('./get-youtube-channel-task'));
+			.do(require('./get-youtube-channel-task')({ youtubeKey: options.youtubeKey }));
 	};
 };

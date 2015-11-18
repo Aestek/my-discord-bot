@@ -1,13 +1,10 @@
 var LolApi = require('leagueapi');
-var config = require('../../../config/config.json');
-
-LolApi.init(config.riotKey);
 
 function ucfirst(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getDivision(pname, server, callback) {
+function getDivision(LolApi, pname, server, callback) {
 	pname = pname.toLowerCase();
 
 	LolApi.Summoner.getByName(pname, server, function(err, summoner) {
@@ -25,21 +22,25 @@ function getDivision(pname, server, callback) {
 	});
 };
 
-module.exports = function(bot, conf, args) {
-	var that = this;
+module.exports = function(options) {
+	return function(bot, conf, args) {
+		var that = this;
 
-	bot.getService('store').getAndUpdate(this.forEachItem, function(data, done) {
-		if (!data.lol || !data.lol.ign)
-			return;
+		LolApi.init(options.riotKey);
 
-		getDivision(data.lol.ign, data.lol.server, function(divisionStr) {
-			if (divisionStr == data.lol.division)
+		bot.getService('store').getAndUpdate(this.forEachItem, function(data, done) {
+			if (!data.lol || !data.lol.ign)
 				return;
 
-			that.sink(that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
+			getDivision(LolApi, data.lol.ign, data.lol.server, function(divisionStr) {
+				if (divisionStr == data.lol.division)
+					return;
 
-			data.lol.division = divisionStr;
-			done();
+				that.sink(that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
+
+				data.lol.division = divisionStr;
+				done();
+			});
 		});
-	});
+	};
 };
