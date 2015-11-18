@@ -3,7 +3,10 @@ var config = require('../config/config.json');
 
 var bot = new Bot(config.discord);
 
-bot.addService('store', bot.services['mongo-store']('mongodb://localhost/discord'));
+var mongoAddr = process.env.DB_PORT_27017_TCP_ADDR + ':' + process.env.DB_PORT_27017_TCP_PORT;
+var mongoUrl = 'mongodb://' + mongoAddr + '/discord';
+
+bot.addService('store', bot.services['mongo-store'](mongoUrl));
 
 var testingChan = '112960513339633664';
 var generalChan = '112588514289258496';
