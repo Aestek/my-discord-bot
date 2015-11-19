@@ -1,0 +1,9 @@
+bot:
+  build: .
+  env_file: bot.env
+  links:
+    - db
+db:
+  image: 'mongo:2.2'
+  volumes:
+    - '/data/raccoon-bot:/data/db'
