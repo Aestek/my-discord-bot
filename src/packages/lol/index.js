@@ -2,6 +2,7 @@ module.exports = function(options) {
 	return function(bot) {
 		bot
 			.on(bot.triggers['mention-command'], 'set-lol-name', ['userName', 'server'])
+			.name('set-lol-name')
 			.describe('Set your League of Legends username. Server can be one of [BR, EUNE, EUW, LAN, LAS, NA, OCE, RU, TR, SEA, KR]')
 			.withStore()
 			.do(require('./set-lol-name-task'));
@@ -10,6 +11,7 @@ module.exports = function(options) {
 			.on(bot.triggers.cron, '* * * * *')
 			.sink(options.sink)
 			.forEachUser()
+			.name('fetch-lol-division')
 			.do(require('./fetch-lol-division-task')({ riotKey: options.riotKey }));
 	};
 };

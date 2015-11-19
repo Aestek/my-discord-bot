@@ -6,6 +6,7 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers.cron, '0 10 * * *')
 			.sink(options.sink)
+			.name('bonjour-madame')
 			.do(function(bot, conf) {
 				var that = this;
 

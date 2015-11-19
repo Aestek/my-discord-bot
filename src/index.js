@@ -10,6 +10,8 @@ var mongoUrl = 'mongodb://' + mongoAddr + '/discord';
 
 bot.addService('store', bot.services['mongo-store'](mongoUrl));
 
+bot.addService('logger', bot.services.logger);
+
 var testingChan = '112960513339633664';
 var generalChan = '112588514289258496';
 
@@ -23,7 +25,9 @@ bot.use(require('./packages/youtube')({
 	youtubeKey: process.env.YOUTUBE_KEY
 }));
 
-bot.use(require('./packages/bonjour-madame')({ sink: generalChan }));
+bot.use(require('./packages/bonjour-madame')({
+	sink: generalChan
+}));
 
 bot.use(require('./packages/twitch')({
 	sink: testingChan,

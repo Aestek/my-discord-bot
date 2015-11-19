@@ -3,6 +3,7 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers['mention-command'], 'set-osu-name', ['userName'])
 			.withStore()
+			.name('set-osu-name')
 			.describe('Set your Osu! name')
 			.do(function(bot, conf, args) {
 				if (!args.commandArgs.userName)
@@ -18,6 +19,7 @@ module.exports = function(options) {
 
 		bot
 			.on(bot.triggers.cron, '0 0/12 * * *')
+			.name('fetch-osu-rank')
 			.sink(options.sink)
 			.forEachUser()
 			.do(require('./fetch-rank-task')({ osuKey: options.osuKey }))
