@@ -36,7 +36,7 @@ module.exports = function(options) {
 				if (divisionStr == data.lol.division)
 					return;
 
-				that.sink(that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
+				that.userSink(that.forEachItem, that.forEachItem.mention() + ' is now **' + divisionStr + '** on LoL');
 
 				data.lol.division = divisionStr;
 				done();

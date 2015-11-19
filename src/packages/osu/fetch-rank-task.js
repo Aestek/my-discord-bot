@@ -22,7 +22,7 @@ module.exports = function(options) {
 
 			getRank(options.osuKey, data.osu.ign, function(rank) {
 				if (Math.abs(rank - (data.osu.rank || 0)) > 1000)
-					that.sink(that.forEachItem.mention() + ' is now **' + rank + '\'th** on Osu!');
+					that.userSink(that.forEachItem, that.forEachItem.mention() + ' is now **' + rank + '\'th** on Osu!');
 
 				data.osu.rank = rank;
 				done();

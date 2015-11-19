@@ -9,7 +9,7 @@ module.exports = function(options) {
 
 		bot
 			.on(bot.triggers.cron, '* * * * *')
-			.sink(options.sink)
+			.userSink(options.sink)
 			.forEachUser()
 			.name('fetch-lol-division')
 			.do(require('./fetch-lol-division-task')({ riotKey: options.riotKey }));

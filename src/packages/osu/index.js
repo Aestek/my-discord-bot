@@ -18,9 +18,9 @@ module.exports = function(options) {
 			});
 
 		bot
-			.on(bot.triggers.cron, '0 0/12 * * *')
+			.on(bot.triggers.cron, '* * * * *')
 			.name('fetch-osu-rank')
-			.sink(options.sink)
+			.userSink(options.sink)
 			.forEachUser()
 			.do(require('./fetch-rank-task')({ osuKey: options.osuKey }))
 	}
