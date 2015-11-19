@@ -30,6 +30,12 @@ bot.use(require('./packages/twitch')({
 	twitchKey: process.env.TWITCH_KEY
 }));
 
+bot.use(require('./packages/osu')({
+	sink: testingChan,
+	osuKey: process.env.OSU_KEY
+}));
+
+
 bot.use(bot.packages.help);
 
 bot.connect(function() {
