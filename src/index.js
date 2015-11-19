@@ -12,33 +12,33 @@ bot.addService('store', bot.services['mongo-store'](mongoUrl));
 
 bot.addService('logger', bot.services.logger);
 
-var testingChan = '112960513339633664';
+// var testingChan = '112960513339633664';
 var generalChan = '112588514289258496';
 
 bot.use(require('./packages/lol')({
-	sink: testingChan,
+	userSink: [generalChan, '107092542922690560'],
 	riotKey: process.env.RIOT_KEY
 }));
 
 bot.use(require('./packages/youtube')({
-	sink: testingChan,
+	sink: '115275054891139078',
 	youtubeKey: process.env.YOUTUBE_KEY
 }));
 
 bot.use(require('./packages/bonjour-madame')({
-	sink: generalChan
+	sink: generalChan,
+	restrict: { serverId: generalChan }
 }));
 
 bot.use(require('./packages/twitch')({
-	sink: testingChan,
+	sink: '107637890850258944',
 	twitchKey: process.env.TWITCH_KEY
 }));
 
 bot.use(require('./packages/osu')({
-	sink: testingChan,
+	userSink: [generalChan, '110620234418790400'],
 	osuKey: process.env.OSU_KEY
 }));
-
 
 bot.use(bot.packages.help);
 

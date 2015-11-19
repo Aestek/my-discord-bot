@@ -30,6 +30,8 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers['mention-command'], 'bonjour-madame')
 			.name('bonjour-madame')
+			.describe('Get daily sexy picture. NSFW')
+			.restrict(options.restrict)
 			.do(function(bot, conf) {
 				var that = this;
 
