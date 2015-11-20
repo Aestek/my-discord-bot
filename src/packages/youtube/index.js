@@ -20,6 +20,13 @@ module.exports = function(options) {
 			.do(require('./set-youtube-channel-task')({ youtubeKey: options.youtubeKey }));
 
 		bot
+			.on(bot.triggers['mention-command'], 'del-youtube-channel')
+			.describe('Delete your Youtube channel.')
+			.name('del-youtube-channel')
+			.withStore()
+			.do(require('./del-youtube-channel-task'));
+
+		bot
 			.on(bot.triggers['mention-command'], 'get-youtube-channel')
 			.describe('get infos about the Youtube channel you set.')
 			.withStore()

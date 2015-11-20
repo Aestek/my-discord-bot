@@ -14,6 +14,13 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
+			.on(bot.triggers['mention-command'], 'del-twitch-channel')
+			.describe('Delete your Twitch channel name')
+			.withStore()
+			.name('del-twitch-name')
+			.do(require('./del-task'));
+
+		bot
 			.on(bot.triggers.cron, '* * * * *')
 			.sink(options.sink)
 			.forEachUser()
