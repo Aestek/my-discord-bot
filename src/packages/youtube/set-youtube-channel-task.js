@@ -7,19 +7,26 @@ module.exports = function(options) {
 		if (!args.commandArgs.channelId)
 			return this.reply('You did not provide a channelId :(.');
 
-		api.getChannelInfos(options.youtubeKey, args.commandArgs.channelId, function(err, res) {
-			if (err)
-				return that.reply('There was an error setting your Youtube channel :(.')
+		var user = args.commandArgs.user || args.message.author;
 
-			if (!res)
-				return that.reply('This Youtube channel does not seem to exist :/.');
+		bot.getService('store').getAndUpdate(user, function(data, done) {
+			api.getChannelInfos(options.youtubeKey, args.commandArgs.channelId, function(err, res) {
+				if (err)
+					return that.reply('There was an error setting your Youtube channel :(.')
 
-			that.store.data.youtube = that.store.data.youtube || {};
-			that.store.data.youtube.channelId = args.commandArgs.channelId;
+				if (!res)
+					return that.reply('This Youtube channel does not seem to exist :/.');
 
-			that.store.done();
+				data.youtube = data.youtube || {};
+				data.youtube.channelId = args.commandArgs.channelId;
 
-			that.reply('Youtube channel set : **' + res.snippet.title + '**\n' + res.snippet.thumbnails.high.url);
+				done();
+
+				if (!args.commandArgs.user)
+					that.reply('Youtube channel set : **' + res.snippet.title + '**\n' + res.snippet.thumbnails.high.url);
+				else
+					that.reply(args.commandArgs.user.username + '\'s Youtube channel set : **' + res.snippet.title + '**\n' + res.snippet.thumbnails.high.url);
+			});
 		});
 	};
 };

@@ -6,6 +6,7 @@ function ucfirst(string) {
 
 function getDivision(LolApi, pname, server, callback) {
 	pname = pname.toLowerCase();
+	server = server.toLowerCase();
 
 	LolApi.Summoner.getByName(pname, server, function(err, summoner) {
 		if (err)

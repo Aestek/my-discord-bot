@@ -8,6 +8,12 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
+			.on(bot.triggers['mention-command'], 'adm-set-twitch-channel', ['@user', 'channelName'])
+			.name('adsm-set-twitch-name')
+			.restrict({ userId: options.admin })
+			.do(require('./set-name-task'));
+
+		bot
 			.on(bot.triggers.cron, '* * * * *')
 			.sink(options.sink)
 			.forEachUser()

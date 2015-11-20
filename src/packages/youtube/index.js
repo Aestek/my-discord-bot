@@ -10,8 +10,13 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers['mention-command'], 'set-youtube-channel', ['channelId'])
 			.describe('Set your Youtube channel id.')
-			.withStore()
 			.name('set-youtube-channel')
+			.do(require('./set-youtube-channel-task')({ youtubeKey: options.youtubeKey }));
+
+		bot
+			.on(bot.triggers['mention-command'], 'adm-set-youtube-channel', ['@user', 'channelId'])
+			.name('adm-set-youtube-channel')
+			.restrict({ userId: options.admin })
 			.do(require('./set-youtube-channel-task')({ youtubeKey: options.youtubeKey }));
 
 		bot

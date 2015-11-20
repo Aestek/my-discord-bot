@@ -14,15 +14,18 @@ bot.addService('logger', bot.services.logger);
 
 // var testingChan = '112960513339633664';
 var generalChan = '112588514289258496';
+var admin = '107618748692729856';
 
 bot.use(require('./packages/lol')({
-	userSink: [generalChan, '107092542922690560'],
-	riotKey: process.env.RIOT_KEY
+	sink: [generalChan, '107092542922690560'],
+	riotKey: process.env.RIOT_KEY,
+	admin: admin
 }));
 
 bot.use(require('./packages/youtube')({
 	sink: '115275054891139078',
-	youtubeKey: process.env.YOUTUBE_KEY
+	youtubeKey: process.env.YOUTUBE_KEY,
+	admin: admin
 }));
 
 bot.use(require('./packages/bonjour-madame')({
@@ -32,12 +35,14 @@ bot.use(require('./packages/bonjour-madame')({
 
 bot.use(require('./packages/twitch')({
 	sink: '107637890850258944',
-	twitchKey: process.env.TWITCH_KEY
+	twitchKey: process.env.TWITCH_KEY,
+	admin: admin
 }));
 
 bot.use(require('./packages/osu')({
-	userSink: [generalChan, '110620234418790400'],
-	osuKey: process.env.OSU_KEY
+	sink: [generalChan, '110620234418790400'],
+	osuKey: process.env.OSU_KEY,
+	admin: admin
 }));
 
 bot.use(bot.packages.help);
