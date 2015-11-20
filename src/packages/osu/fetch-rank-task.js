@@ -24,13 +24,23 @@ module.exports = function(options) {
 				return;
 
 			getRank(options.osuKey, data.osu.ign, function(rank) {
-				if (Math.abs(rank - (data.osu.rank || 0)) > 1000)
-					that.userSink(that.forEachItem, that.forEachItem.mention() + ' is now **' + rank + '\'th** on Osu!');
+				if (Math.abs(rank - (data.osu.rank || 0)) < 1000)
+					return;
 
-				if (rank != data.osu.rank) {
-					data.osu.rank = rank;
-					done();
+				var lastNum = (rank + '').substr(-1);
+
+				var l;
+				switch (lastNum) {
+					case 1: l = 'st'; break;
+					case 2: l = 'nd'; break;
+					case 3: l = 'rd'; break;
+					default: l = 'th';
 				}
+
+				that.userSink(that.forEachItem, that.forEachItem.mention() + ' is now **' + rank + '**' + l + ' on Osu!');
+
+				data.osu.rank = rank;
+				done();
 			});
 		});
 	};
