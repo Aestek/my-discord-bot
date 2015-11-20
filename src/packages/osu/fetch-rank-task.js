@@ -3,10 +3,13 @@ var request = require('request');
 function getRank(osuKey, pname, callback) {
 	var url = 'https://osu.ppy.sh/api/get_user?k=' + osuKey + '&u=' + pname;
 	request(url, function(err, res, body) {
+		if (err)
+			return console.log(err);
+
 		var data = JSON.parse(body);
 
 		if (!data || !data[0])
-			return;
+			return console.log(body);
 
 		callback(parseInt(data[0].pp_rank));
 	});
@@ -24,8 +27,10 @@ module.exports = function(options) {
 				if (Math.abs(rank - (data.osu.rank || 0)) > 1000)
 					that.userSink(that.forEachItem, that.forEachItem.mention() + ' is now **' + rank + '\'th** on Osu!');
 
-				data.osu.rank = rank;
-				done();
+				if (rank != data.osu.rank) {
+					data.osu.rank = rank;
+					done();
+				}
 			});
 		});
 	};
