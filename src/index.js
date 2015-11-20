@@ -45,6 +45,13 @@ bot.use(require('./packages/osu')({
 	admin: admin
 }));
 
+bot
+	.on(bot.triggers.react, /argent/i)
+	.restrict({ serverId: generalChan })
+	.do(function(bot, conf, args) {
+		bot.client.sendMessage(args.message, '**ARGENT** = **POGNON**')
+	});
+
 bot.use(bot.packages.help);
 
 bot.connect(function() {
