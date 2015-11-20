@@ -13,7 +13,7 @@ module.exports = function(options) {
 			.do(require('./set-lol-name-task'));
 
 		bot
-			.on(bot.triggers.cron, '* * * * *')
+			.on(bot.triggers.cron, '*/20 * * * *')
 			.userSink(options.sink)
 			.forEachUser()
 			.name('fetch-lol-division')

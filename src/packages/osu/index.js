@@ -13,7 +13,7 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
-			.on(bot.triggers.cron, '* * * * *')
+			.on(bot.triggers.cron, '*/20 * * * *')
 			.name('fetch-osu-rank')
 			.userSink(options.sink)
 			.forEachUser()
