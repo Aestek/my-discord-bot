@@ -13,6 +13,9 @@ module.exports = function(options) {
 				return;
 
 			client.streams({ channel: data.twitch.channelName }, function(err, response) {
+				if (err)
+					return console.log(err);
+
 				if (!response.stream && !data.twitch.streaming)
 					return;
 				else if (!response.stream && data.twitch.streaming) {
