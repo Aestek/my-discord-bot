@@ -13,9 +13,14 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
-			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(\w)\/(\d+)/)
+			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(s|b)\/(\d+)/)
 			.name('get-osu-bm-infos')
 			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
+
+		bot
+			.on(bot.triggers.react, /(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/)/)
+			.name('get-ss-infos')
+			.do(require('./ss-infos-task')({ osuKey: options.osuKey }));
 
 		bot
 			.on(bot.triggers.cron, '*/20 * * * *')
