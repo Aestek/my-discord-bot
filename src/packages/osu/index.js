@@ -13,6 +13,11 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
+			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(\w)\/(\d+)/)
+			.name('get-osu-bm-infos')
+			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
+
+		bot
 			.on(bot.triggers.cron, '*/20 * * * *')
 			.name('fetch-osu-rank')
 			.userSink(options.sink)
