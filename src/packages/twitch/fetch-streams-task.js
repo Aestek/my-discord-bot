@@ -30,6 +30,7 @@ module.exports = function(options) {
 						response.stream.channel.url + '\n' +
 						response.stream.channel.status;
 
+					console.log(message);
 					that.sink(message);
 				}
 			});
