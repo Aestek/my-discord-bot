@@ -58,7 +58,7 @@ Api.prototype.getUser = function(name, callback) {
 		if (!data || !data[0])
 			return callback(new Error('Invalid response : ' + body));
 
-		callback(data[0]);
+		callback(null, data[0]);
 	});
 };
 
