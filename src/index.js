@@ -10,7 +10,10 @@ var mongoUrl = 'mongodb://' + mongoAddr + '/discord';
 
 bot.addService('store', bot.services['mongo-store'](mongoUrl));
 
-bot.addService('logger', bot.services.logger);
+bot.addService('logger', new bot.services['logger-aggregate']([
+	bot.services['console-logger'],
+	new bot.services['channel-logger'](bot, '118319742648975360')
+]));
 
 // var testingChan = '112960513339633664';
 var generalChan = '112588514289258496';
