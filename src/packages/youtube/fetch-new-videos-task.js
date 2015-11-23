@@ -15,6 +15,11 @@ module.exports = function(options) {
 
 				var lastVideo = videos[0];
 
+				if (!data.youtube.videos) {
+					data.youtube.videos = [lastVideo.id.videoId];
+					return done();
+				}
+
 				data.youtube.videos = data.youtube.videos || [];
 
 				if (data.youtube.videos.indexOf(lastVideo.id.videoId) != -1)
