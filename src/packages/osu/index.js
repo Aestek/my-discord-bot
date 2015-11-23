@@ -28,5 +28,11 @@ module.exports = function(options) {
 			.userSink(options.sink)
 			.forEachUser()
 			.do(require('./fetch-rank-task')({ osuKey: options.osuKey }))
+
+		bot
+			.on(bot.triggers.cron, '0 16 * * *')
+			.name('fetch-new-ranked-maps')
+			.userSink(options.sink)
+			.do(require('./fetch-new-ranked-task')({ osuKey: options.osuKey }));
 	}
 }

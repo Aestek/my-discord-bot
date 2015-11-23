@@ -28,6 +28,25 @@ Api.prototype.getBeatMap = function(type, id, callback) {
 	});
 };
 
+Api.prototype.getBeatMaps = function(options, callback) {
+	var url = 'https://osu.ppy.sh/api/get_beatmaps?k=' + this.key;
+
+	if (options.since)
+		url += '&since=' + options.since;
+
+	request(url, function(err, res, body) {
+		if (err)
+			return callback(err);
+
+		var data = JSON.parse(body);
+
+		if (!data)
+			return callback(new Error('Invalid response : ' + body));
+
+		callback(null, data);
+	});
+};
+
 Api.prototype.getUser = function(name, callback) {
 	var url = 'https://osu.ppy.sh/api/get_user?k=' + this.key + '&u=' + name;
 	request(url, function(err, res, body) {
