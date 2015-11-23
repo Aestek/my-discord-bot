@@ -98,7 +98,7 @@ module.exports = function(options) {
 										return;
 
 									api.formatBeatMapInfos([b], function(err, message) {
-										bot.client.sendMessage(args.message, message);
+										bot.sendMessage(args.message, message);
 									});
 								});
 							}
