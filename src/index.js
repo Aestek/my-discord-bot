@@ -55,6 +55,8 @@ bot
 		bot.client.sendMessage(args.message, '**ARGENT** = **POGNON**')
 	});
 
+bot.use(require('./packages/raccoon'));
+
 bot.use(bot.packages.help);
 
 bot.connect(function() {
