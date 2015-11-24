@@ -27,6 +27,9 @@ module.exports = function(options) {
 	return function(bot, conf, args) {
 		var that = this;
 
+		// disable for now.
+		return;
+
 		LolApi.init(options.riotKey);
 
 		bot.getService('store').getAndUpdate(this.forEachItem, function(data, done) {
