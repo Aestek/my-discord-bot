@@ -13,6 +13,18 @@ module.exports = function(options) {
 			.do(require('./set-name-task'));
 
 		bot
+			.on(bot.triggers['mention-command'], 'del-osu-name')
+			.name('del-osu-name')
+			.describe('Set your Osu! name')
+			.do(require('./del-name-task'));
+
+		bot
+			.on(bot.triggers['mention-command'], 'adm-del-osu-name', ['@user'])
+			.name('adm-del-osu-name')
+			.restrict({ userId: options.admin })
+			.do(require('./del-name-task'));
+
+		bot
 			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(s|b)\/(\d+)/)
 			.name('get-osu-bm-infos')
 			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
