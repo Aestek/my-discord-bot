@@ -22,7 +22,9 @@ module.exports = function(options) {
 
 			var bm = _.groupBy(bm, 'beatmapset_id');
 
-			async.map(bm, api.formatBeatMapInfos, function(err, bm) {
+			async.map(bm, function(b, cb) {
+				api.formatBeatMapInfos(b, null, cb);
+			}, function(err, bm) {
 				that.sink('New 5.5*+ have been ranked !', function() {
 					for (var i in bm)
 						that.sink(bm[i]);
