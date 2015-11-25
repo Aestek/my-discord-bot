@@ -92,14 +92,14 @@ module.exports = function(options) {
 								if (!beatmaps.length)
 									return;
 
-
+								var selected;
 								beatmaps[0].forEach(function(b) {
-									if (n(b.version) != n(version))
-										return;
+									if (n(b.version) == n(version))
+										selected = b.beatmap_id;
+								});
 
-									api.formatBeatMapInfos([b], function(err, message) {
-										bot.sendMessage(args.message, message);
-									});
+								api.formatBeatMapInfos(beatmaps[0], selected, function(err, message) {
+									bot.sendMessage(args.message, message);
 								});
 							}
 						);

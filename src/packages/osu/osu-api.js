@@ -15,6 +15,7 @@ var Api = function(key) {
 
 Api.prototype.getBeatMap = function(type, id, callback) {
 	var url = 'https://osu.ppy.sh/api/get_beatmaps?k=' + this.key + '&' + type + '=' + id;
+
 	request(url, function(err, res, body) {
 		if (err)
 			return callback(err);
@@ -25,6 +26,22 @@ Api.prototype.getBeatMap = function(type, id, callback) {
 			return callback(new Error('Invalid response : ' + body));
 
 		callback(null, data);
+	});
+};
+
+Api.prototype.getBeatMapSet = function(type, id, callback) {
+	if (type == 's')
+		return this.getBeatMap(type, id, callback);
+
+	var that = this;
+
+	this.getBeatMap(type, id, function(err, data) {
+		if (err)
+			return callback(err);
+
+		var setId = data[0].beatmapset_id;
+
+		that.getBeatMap('s', setId, callback);
 	});
 };
 
@@ -62,7 +79,7 @@ Api.prototype.getUser = function(name, callback) {
 	});
 };
 
-Api.prototype.formatBeatMapInfos = function(infos, callback) {
+Api.prototype.formatBeatMapInfos = function(infos, selected, callback) {
 	var msg = '**' + infos[0].artist + '** - **' +
 		infos[0].title + '**, mapped by ' +
 		infos[0].creator +
@@ -77,6 +94,9 @@ Api.prototype.formatBeatMapInfos = function(infos, callback) {
 		drms = Math.max(drms, b.version.length);
 	});
 
+	var padLeft = function(l,s, c) {return Array(l-s.length+1).join(c||" ") + s};
+	var padRight = function(l,s, c) {return s + Array(l-s.length+1).join(c||" ")};
+
 	request('https://osu.ppy.sh/s/' + infos[0].beatmapset_id, function(err, res, body) {
 		var thumb = $(body).find('img.bmt').attr('src');
 
@@ -87,15 +107,34 @@ Api.prototype.formatBeatMapInfos = function(infos, callback) {
 
 		infos.forEach(function(b) {
 			var starValue = Math.round(b.difficultyrating * 100) / 100;
-			var versionStr = '`[' + b.version + '] ' + (' '.repeat(drms - b.version.length)) + ':`';
 
-			msg += versionStr + '  CS: ' +
-				b.diff_size + ' AR: ' +
-				b.diff_approach + ' OD: ' +
-				b.diff_overall + ' HP: ' +
-				b.diff_drain + ' Stars: ' +
-				':star:'.repeat(Math.round(b.difficultyrating)) +
-				' (' + starValue + ')\n';
+			if (selected == b.beatmap_id)
+				msg += '**';
+
+			msg += '`[';
+
+			if (selected)
+				msg += selected == b.beatmap_id ? '> ' : '  ';
+
+			msg += padRight(drms, b.version);
+
+			if (selected)
+				msg += selected == b.beatmap_id ? ' <' : '  ';
+
+			msg += ']`';
+
+			msg +=  '  ` CS ' + padLeft(4, b.diff_size) +
+					' ` ` AR ' + padLeft(4, b.diff_approach) +
+					' ` ` OD ' + padLeft(4, b.diff_overall) +
+					' ` ` HP ' + padLeft(4, b.diff_drain) +
+					' ` ` Stars ` ' +
+						':star:'.repeat(Math.round(b.difficultyrating)) +
+						' (' + starValue + ')';
+
+			if (selected == b.beatmap_id)
+				msg += '**';
+
+			msg += '\n';
 		});
 
 		callback(null, msg);

@@ -9,8 +9,14 @@ module.exports = function(options) {
 			function(cb) {
 				var match = args.message.content.match(/https?:\/\/osu\.ppy\.sh\/(\w)\/(\d+)/);
 
-				api.getBeatMap(match[1], match[2], function(err, infos) {
-					api.formatBeatMapInfos(infos, function(err, message) {
+				var type = match[1];
+				var id = match[2];
+
+				api.getBeatMapSet(type, id, function(err, infos) {
+					if (err)
+						return console.log(err);
+
+					api.formatBeatMapInfos(infos, type == 'b' ? id : null, function(err, message) {
 						cb(message);
 					});
 				});
