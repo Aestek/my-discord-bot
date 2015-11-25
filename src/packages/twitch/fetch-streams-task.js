@@ -23,7 +23,15 @@ module.exports = function(options) {
 					done();
 					return;
 				} else if (!data.twitch.streaming) {
+					var threshold = 60 * 30 * 1000;
+					var now = new Date().getTime();
+
+					if (data.twitch.lastCheck && now - data.twitch.lastCheck < threshold)
+						return;
+
 					data.twitch.streaming = true;
+					data.twitch.lastCheck = now;
+
 					done();
 
 					var message = that.forEachItem.mention() + ' is now streaming **' + response.stream.channel.game + '** on Twitch ! ' +
