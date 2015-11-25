@@ -57,6 +57,10 @@ bot
 
 bot.use(require('./packages/raccoon'));
 
+bot.use(require('./packages/user')({
+	admin: admin
+}));
+
 bot.use(bot.packages.help);
 
 bot.connect(function() {
