@@ -172,6 +172,21 @@ Api.prototype.searchBeatmaps = function(s, callback) {
 	}, function() {
 		callback(null, beatmaps);
 	});
-}
+};
+
+Api.prototype.getUserRencentPlays = function(user, callback) {
+	var url = 'https://osu.ppy.sh/api/get_user_recent?k=' + this.key + '&u=' + user;
+	request(url, function(err, res, body) {
+		if (err)
+			return callback(err);
+
+		var data = JSON.parse(body);
+
+		if (!data)
+			return callback(new Error('Invalid response : ' + body));
+
+		callback(null, data);
+	});
+};
 
 module.exports = Api;

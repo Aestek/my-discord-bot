@@ -25,6 +25,13 @@ module.exports = function(options) {
 			.do(require('./del-name-task'));
 
 		bot
+			.on(bot.triggers['mention-command'], 'last-osu', ['userName'])
+			.name('get-last-osu-play')
+			.describe('Print infos about your last Osu! play')
+			.withStore()
+			.do(require('./get-last-play-task')({ osuKey: options.osuKey }));
+
+		bot
 			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(s|b)\/(\d+)/)
 			.name('get-osu-bm-infos')
 			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
