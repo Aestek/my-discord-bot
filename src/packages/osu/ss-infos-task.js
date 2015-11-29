@@ -21,9 +21,13 @@ module.exports = function(options) {
 	var api = new osuApi(options.osuKey);
 
 	return function(bot, conf, args) {
+		var that = this;
+
 		var match = args.message.content.match(/(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/[\w+.\/]+)/);
 		var imgUrl = match[0];
 		var imgPath = '/tmp/' + Math.random() + '.jpg';
+
+		this.log('Tring to find ss infos from ' + imgUrl);
 
 		var r = request(imgUrl);
 		r.on('response', function (res) {
@@ -31,11 +35,13 @@ module.exports = function(options) {
 			res.on('end', function() {
 				tesseract.process(imgPath, function(err, text) {
 					if (err)
-						return console.log(err);
+						return that.log(err);
+
+					that.log('OCR:', text);
 
 					text = text.replace(/—/g, '-').replace(/\|</g, 'k').replace(/\|/, 'i');
 					var lines = text.split(/\n/).filter(function(l) {
-						return !l.match(/^\s*$/);
+						return !l.match(/^\s*$/) && l.length > 5;
 					});
 					var titleLine = lines[0];
 
@@ -63,11 +69,13 @@ module.exports = function(options) {
 					if (m)
 						author = m[1];
 
-					console.log('Matched ss screenshot', [artist, name, version, author]);
+					that.log('Matched ss screenshot', [artist, name, version, author]);
 
 					var searchStr = (name + ' ' + author).replace(/[^\w]/g, ' ');
 
 					api.searchBeatmaps(searchStr, function(err, beatmaps) {
+
+						that.log(beatmaps);
 						beatmaps = beatmaps.filter(function(b) {
 							return n(b.artist) == n(artist) &&
 								n(b.title) == n(name);
