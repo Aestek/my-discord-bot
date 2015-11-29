@@ -150,7 +150,7 @@ Api.prototype.searchBeatmaps = function(s, callback) {
 	var beatmaps = [];
 
 	async.each(pages, function(p, callback) {
-		var searchUrl = 'https://osu.ppy.sh/p/beatmaplist?q=' + encodeURIComponent(s) + '&m=-1&r=4&g=0&la=0&ra=&page=' + p;
+		var searchUrl = 'https://osu.ppy.sh/p/beatmaplist?q=' + encodeURIComponent(s) + '&m=-1&r=0&g=0&la=0&ra=&page=' + p;
 		request(searchUrl, function(err, res, body) {
 			if (err)
 				return console.log(err);
