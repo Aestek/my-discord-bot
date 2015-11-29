@@ -2,13 +2,6 @@ var request = require('request');
 var $ = require('cheerio');
 var async = require('async');
 
-var bmStatuses = {
-	3: 'qualified',
-	2: 'approved',
-	1: 'ranked',
-	0: 'pending'
-};
-
 var Api = function(key) {
 	this.key = key;
 };
@@ -80,10 +73,20 @@ Api.prototype.getUser = function(name, callback) {
 };
 
 Api.prototype.formatBeatMapInfos = function(infos, selected, callback) {
+	var status;
+
+	switch (infos[0].approved) {
+		case 3:  status = 'qualified';
+		case 2:  status = 'approved';
+		case 1:  status = 'ranked';
+		case 0:  status = 'pending';
+		default: status = 'unranked';
+	}
+
 	var msg = '**' + infos[0].artist + '** - **' +
 		infos[0].title + '**, mapped by ' +
 		infos[0].creator +
-		' (' + bmStatuses[infos[0].approved] + ')\n';
+		' (' + status + ')\n';
 
 	infos.sort(function(a, b) {
 		return b.difficultyrating - a.difficultyrating;
