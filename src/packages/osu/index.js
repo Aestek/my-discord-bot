@@ -51,7 +51,7 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers.cron, '0 16 * * *')
 			.name('fetch-new-ranked-maps')
-			.userSink(options.sink)
+			.sink(options.sink)
 			.do(require('./fetch-new-ranked-task')({ osuKey: options.osuKey }));
 	}
 }
