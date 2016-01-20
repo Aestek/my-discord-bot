@@ -32,7 +32,7 @@ bot.use(require('./packages/youtube')({
 }));
 
 bot.use(require('./packages/bonjour-madame')({
-	sink: generalChan,
+	sink: '112588997171089408',
 	restrict: { serverId: generalChan }
 }));
 
