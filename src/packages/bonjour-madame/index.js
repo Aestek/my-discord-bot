@@ -4,7 +4,7 @@ var request = require('request');
 function getMadam(callback) {
 	var that = this;
 
-	request('http://www.bonjourmadame.fr/', function(err, res, body) {
+	request('http://ditesbonjouralamadame.tumblr.com/', function(err, res, body) {
 		if (err)
 			return console.log(err);
 
