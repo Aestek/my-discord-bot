@@ -63,12 +63,16 @@ Api.prototype.getUser = function(name, callback) {
 		if (err)
 			return callback(err);
 
-		var data = JSON.parse(body);
+		try {
+			var data = JSON.parse(body);
 
-		if (!data || !data[0])
-			return callback(new Error('Invalid response : ' + body));
+			if (!data || !data[0])
+				return callback(new Error('Invalid response : ' + body));
 
-		callback(null, data[0]);
+			callback(null, data[0]);
+		} catch (e) {
+			callback(e);
+		}
 	});
 };
 
