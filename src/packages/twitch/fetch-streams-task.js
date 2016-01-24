@@ -1,10 +1,19 @@
-var TwitchClient = require("node-twitchtv");
+var request = require('request');
+
+function getStreams(channel, callback) {
+	request.get({
+		url: "https://api.twitch.tv/kraken/streams/" + channel
+	}, function(err, response, body) {
+		try {
+			body = JSON.parse(body);
+			callback.call(null, body);
+		} catch (e) {
+			callback(e);
+		}
+	});
+}
 
 module.exports = function(options) {
-	var client = new TwitchClient({
-		client_id: options.twitchKey
-	});
-
 	return function(bot, conf) {
 		var that = this;
 
@@ -12,7 +21,7 @@ module.exports = function(options) {
 			if (!data.twitch || !data.twitch.channelName)
 				return;
 
-			client.streams({ channel: data.twitch.channelName }, function(err, response) {
+			getStreams(data.twitch.channelName, function(err, response) {
 				if (err)
 					return console.log(err);
 

@@ -16,7 +16,6 @@
     "discord-bot": "^0.2.2",
     "leagueapi": "^0.4.10",
     "node-tesseract": "^0.2.7",
-    "node-twitchtv": "0.0.4",
     "request": "^2.65.0",
     "underscore": "^1.8.3",
     "webshot": "^0.16.0"
