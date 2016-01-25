@@ -79,7 +79,7 @@ Api.prototype.getUser = function(name, callback) {
 Api.prototype.formatBeatMapInfos = function(infos, selected, callback) {
 	var status;
 
-	switch (infos[0].approved) {
+	switch (parseInt(infos[0].approved)) {
 		case 3:  status = 'qualified';
 		case 2:  status = 'approved';
 		case 1:  status = 'ranked';
