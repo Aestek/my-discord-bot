@@ -5,8 +5,7 @@ function getStreams(channel, callback) {
 		url: "https://api.twitch.tv/kraken/streams/" + channel
 	}, function(err, response, body) {
 		try {
-			body = JSON.parse(body);
-			callback.call(null, body);
+			callback(null, JSON.parse(body));
 		} catch (e) {
 			callback(e);
 		}
