@@ -43,7 +43,7 @@ bot.use(require('./packages/twitch')({
 }));
 
 bot.use(require('./packages/osu')({
-	sink: [generalChan, '110620234418790400'],
+	sink: '110620234418790400',
 	osuKey: process.env.OSU_KEY,
 	admin: admin
 }));
