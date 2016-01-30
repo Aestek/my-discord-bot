@@ -1,6 +1,7 @@
 var request = require('request');
 var $ = require('cheerio');
 var async = require('async');
+var _ = require('underscore');
 
 var Api = function(key) {
 	this.key = key;
@@ -13,12 +14,16 @@ Api.prototype.getBeatMap = function(type, id, callback) {
 		if (err)
 			return callback(err);
 
-		var data = JSON.parse(body);
+		try {
+			var data = JSON.parse(body);
 
-		if (!data || !data[0])
-			return callback(new Error('Invalid response : ' + body));
+			if (!data || !data[0])
+				return callback(new Error('Invalid response : ' + body));
 
-		callback(null, data);
+			callback(null, data);
+		} catch (e) {
+			callback(e);
+		}
 	});
 };
 
@@ -48,12 +53,16 @@ Api.prototype.getBeatMaps = function(options, callback) {
 		if (err)
 			return callback(err);
 
-		var data = JSON.parse(body);
+		try {
+			var data = JSON.parse(body);
 
-		if (!data)
-			return callback(new Error('Invalid response : ' + body));
+			if (!data)
+				return callback(new Error('Invalid response : ' + body));
 
-		callback(null, data);
+			callback(null, data);
+		} catch (e) {
+			callback(e);
+		}
 	});
 };
 
@@ -77,13 +86,14 @@ Api.prototype.getUser = function(name, callback) {
 };
 
 Api.prototype.formatBeatMapInfos = function(infos, selected, callback) {
+	var that = this;
 	var status;
 
 	switch (parseInt(infos[0].approved)) {
-		case 3:  status = 'qualified';
-		case 2:  status = 'approved';
-		case 1:  status = 'ranked';
-		case 0:  status = 'pending';
+		case 3:  status = 'qualified'; break;
+		case 2:  status = 'approved';  break;
+		case 1:  status = 'ranked';    break;
+		case 0:  status = 'pending';   break;
 		default: status = 'unranked';
 	}
 
@@ -112,39 +122,51 @@ Api.prototype.formatBeatMapInfos = function(infos, selected, callback) {
 
 		msg += 'https://osu.ppy.sh/s/' + infos[0].beatmapset_id + '\n';
 
-		infos.forEach(function(b) {
-			var starValue = Math.round(b.difficultyrating * 100) / 100;
+		that.getPP(infos, function(err, infosWithPP) {
+			if (err) {
+				console.log(err);
+				infosWithPP = infos;
+			}
 
-			if (selected == b.beatmap_id)
-				msg += '**';
+			infosWithPP.forEach(function(b) {
+				var starValue = Math.round(b.difficultyrating * 100) / 100;
 
-			msg += '`[';
+				if (selected == b.beatmap_id)
+					msg += '**';
 
-			if (selected)
-				msg += selected == b.beatmap_id ? '> ' : '  ';
+				msg += '`[';
 
-			msg += padRight(drms, b.version);
+				if (selected)
+					msg += selected == b.beatmap_id ? '> ' : '  ';
 
-			if (selected)
-				msg += selected == b.beatmap_id ? ' <' : '  ';
+				msg += padRight(drms, b.version);
 
-			msg += ']`';
+				if (selected)
+					msg += selected == b.beatmap_id ? ' <' : '  ';
 
-			msg +=  '  ` CS ' + padLeft(4, b.diff_size) +
-					' ` ` AR ' + padLeft(4, b.diff_approach) +
-					' ` ` OD ' + padLeft(4, b.diff_overall) +
-					' ` ` HP ' + padLeft(4, b.diff_drain) +
-					' ` ` Stars ` ' +
-						':star:'.repeat(Math.round(b.difficultyrating)) +
-						' (' + starValue + ')';
+				msg += ']`';
 
-			if (selected == b.beatmap_id)
-				msg += '**';
+				msg +=  '  ` CS ' + padLeft(4, b.diff_size) +
+						' ` ` AR ' + padLeft(4, b.diff_approach) +
+						' ` ` OD ' + padLeft(4, b.diff_overall) +
+						' ` ` HP ' + padLeft(4, b.diff_drain) + ' ` ';
 
-			msg += '\n';
+				for (var i in b.pp) {
+					msg += '*` PP ' + padLeft(3, i.toString()) + '% ' + padLeft(4, Math.round(b.pp[i]).toString()) + '`* ';
+				}
+
+				msg +=  '` Stars ` ' +
+							':star:'.repeat(Math.round(b.difficultyrating)) +
+							' (' + starValue + ')';
+
+				if (selected == b.beatmap_id)
+					msg += '**';
+
+				msg += '\n';
+			});
+
+			callback(null, msg);
 		});
-
-		callback(null, msg);
 	});
 };
 
@@ -193,6 +215,64 @@ Api.prototype.getUserRencentPlays = function(user, callback) {
 			return callback(new Error('Invalid response : ' + body));
 
 		callback(null, data);
+	});
+};
+
+Api.prototype.getPP = function(bmInfos, callback) {
+	var q = bmInfos[0].artist + ' - ' + bmInfos[0].title;
+
+	request({
+		url: 'https://ppaddict.tillerino.org/ppaddict/beatmaps',
+		method: 'post',
+		headers: {
+			'Content-Type': 'text/x-gwt-rpc; charset=UTF-8',
+			'X-GWT-Permutation': '8EB30960AA9774B36D72833C2F0145F3'
+		},
+		body: '7|0|9|https://ppaddict.tillerino.org/ppaddict/|B286115FB89A22A62BDBCDDD8711BE58|org.tillerino.ppaddict.client.services.BeatmapTableService|getRange|org.tillerino.ppaddict.shared.BeatmapRangeRequest/2860797212|org.tillerino.ppaddict.shared.MinMax/3007168893|org.tillerino.ppaddict.shared.Searches/2104613160||' + q + '|1|2|3|4|1|5|5|6|0|0|6|0|0|6|0|0|1|6|0|0|100|0|6|0|0|6|0|0|6|0|0|7|0|8|9|0|0|6|0|0|0|'
+	}, function(err, res, body) {
+		if (err)
+			return callback(err);
+
+		try {
+			body = body.replace(/^\/\/OK/, '').replace(/\\x/g, '');
+			var data = JSON.parse(body);
+
+			var infos = [];
+			while (data.length >= 17) {
+				var d = data.splice(0, 17);
+
+				infos.push({
+					setId: d[5],
+					id: d[14],
+					mod: d[8],
+					pp93: d[9],
+					pp100: d[11]
+				});
+			}
+
+			infos = _.filter(infos, function(i) {
+				return i.setId == bmInfos[0].beatmapset_id
+					&& i.mod == 0;
+			});
+
+			infos = _.indexBy(infos, 'id');
+
+			for (var i in bmInfos) {
+				var bmInfo = bmInfos[i];
+				var ppInfos = infos[bmInfo.beatmap_id];
+				if (!ppInfos)
+					continue;
+
+				bmInfo.pp = {
+					93: ppInfos.pp93,
+					100: ppInfos.pp100
+				};
+			}
+
+			callback(null, bmInfos);
+		} catch (e) {
+			callback(e);
+		}
 	});
 };
 

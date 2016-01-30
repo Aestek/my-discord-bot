@@ -37,12 +37,12 @@ module.exports = function(options) {
 					if (err)
 						return that.log(err);
 
-					that.log('OCR:', text);
 
 					text = text.replace(/—/g, '-').replace(/\|</g, 'k').replace(/\|/, 'i');
 					var lines = text.split(/\n/).filter(function(l) {
 						return !l.match(/^\s*$/) && l.length > 5;
 					});
+					that.log('OCR:' + JSON.stringify(lines));
 					var titleLine = lines[0];
 
 					if (!titleLine)
@@ -74,8 +74,6 @@ module.exports = function(options) {
 					var searchStr = (name + ' ' + author).replace(/[^\w]/g, ' ');
 
 					api.searchBeatmaps(searchStr, function(err, beatmaps) {
-
-						that.log(beatmaps);
 						beatmaps = beatmaps.filter(function(b) {
 							return n(b.artist) == n(artist) &&
 								n(b.title) == n(name);
