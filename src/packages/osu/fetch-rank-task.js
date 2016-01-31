@@ -17,7 +17,13 @@ module.exports = function(options) {
 
 				var rank = userInfos.pp_rank;
 
-				if (Math.abs(rank - (data.osu.rank || 0)) < 1000)
+				var oldRank = data.osu.rank || 0;
+				var deltaRank = Math.abs(rank - oldRank);
+
+				var A = 0.98445611;
+				var B = 0.6379317652;
+
+				if (deltaRank < Math.round(A * Math.pow(oldRank, B)))
 					return;
 
 				var lastNum = (rank + '').substr(-1);
