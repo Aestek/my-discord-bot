@@ -13,6 +13,9 @@ module.exports = function(options) {
 		var yesterday = now - 60 * 60 * 24 * 1000;
 
 		api.getBeatMaps({ since: dateFormat(yesterday, 'yyyy-mm-dd') }, function(err, bm) {
+			if (err)
+				return that.log(err);
+
 			bm = bm.filter(function(bs) {
 				return bs.approved == 1 && bs.difficultyrating > 5.5;
 			});
