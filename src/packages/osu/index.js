@@ -34,11 +34,13 @@ module.exports = function(options) {
 		bot
 			.on(bot.triggers.react, /https?:\/\/osu\.ppy\.sh\/(s|b)\/(\d+)/)
 			.name('get-osu-bm-infos')
+			.restrict(options.restrict)
 			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
 
 		bot
 			.on(bot.triggers.react, /(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/)/)
 			.name('get-ss-infos')
+			.restrict(options.restrict)
 			.do(require('./ss-infos-task')({ osuKey: options.osuKey }));
 
 		bot

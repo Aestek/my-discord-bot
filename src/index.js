@@ -45,7 +45,17 @@ bot.use(require('./packages/twitch')({
 bot.use(require('./packages/osu')({
 	sink: '110620234418790400',
 	osuKey: process.env.OSU_KEY,
-	admin: admin
+	admin: admin,
+	restrict: {
+		channelId: [
+			'107832792523513856',
+			'104512036657967104',
+			'101964068939632640',
+			'110620234418790400',
+			'101964105186828288',
+			'101964176787771392'
+		]
+	}
 }));
 
 bot
