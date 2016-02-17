@@ -43,7 +43,10 @@ bot.use(require('./packages/twitch')({
 }));
 
 bot.use(require('./packages/osu')({
-	sink: '110620234418790400',
+	sink: [
+		'110620234418790400',
+		'106639274580914176'
+	],
 	osuKey: process.env.OSU_KEY,
 	admin: admin,
 	restrict: {
@@ -54,7 +57,8 @@ bot.use(require('./packages/osu')({
 			'110620234418790400',
 			'101964105186828288',
 			'101964176787771392'
-		]
+		],
+		serverId: '106636755901415424'
 	}
 }));
 
