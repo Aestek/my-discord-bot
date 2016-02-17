@@ -38,7 +38,7 @@ module.exports = function(options) {
 			.do(require('./get-bm-task')({ osuKey: options.osuKey }));
 
 		bot
-			.on(bot.triggers.react, /(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/)/)
+			.on(bot.triggers.react, /(https?:\/\/osu\.ppy\.sh\/ss\/\d+|https?:\/\/puu\.sh\/|https?:\/\/\w\.imgur\.com\/)/)
 			.name('get-ss-infos')
 			.restrict(options.restrict)
 			.do(require('./ss-infos-task')({ osuKey: options.osuKey }));

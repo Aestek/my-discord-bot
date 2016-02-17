@@ -23,7 +23,7 @@ module.exports = function(options) {
 	return function(bot, conf, args) {
 		var that = this;
 
-		var match = args.message.content.match(/(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/[\w+.\/]+)/);
+		var match = args.message.content.match(/(https?:\/\/osu\.ppy\.sh\/ss\/\d+|http:\/\/puu\.sh\/[\w+.\/]+|https?:\/\/i.imgur.com\/[\w_-]+\.jpg)/);
 		var imgUrl = match[0];
 		var imgPath = '/tmp/' + Math.random() + '.jpg';
 
