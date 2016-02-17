@@ -26,7 +26,7 @@ bot.use(require('./packages/lol')({
 }));
 
 bot.use(require('./packages/youtube')({
-	sink: '115275054891139078',
+	sink: ['115275054891139078', '106639274580914176'],
 	youtubeKey: process.env.YOUTUBE_KEY,
 	admin: admin
 }));
@@ -37,7 +37,7 @@ bot.use(require('./packages/bonjour-madame')({
 }));
 
 bot.use(require('./packages/twitch')({
-	sink: '107637890850258944',
+	sink: ['107637890850258944', '106639274580914176'],
 	twitchKey: process.env.TWITCH_KEY,
 	admin: admin
 }));
